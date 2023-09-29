@@ -2,20 +2,28 @@ import styled from "styled-components";
 import banner from "../../../assets/main_room_banner.jpeg";
 import { DEVICES } from "../../../constants/devices";
 import { IoCallOutline } from "react-icons/io5";
+import { useMemo } from "react";
 
 function About() {
+  const isMobile = useMemo(() => window.innerWidth <= 900, []);
+
+  const handleCall = () => {
+    window.location.href = "tel:0980410108";
+  };
   return (
-    <Wrapper>
-      <AboutSection>
-        <div>
-          <Heading>Nirvana ​Рівне</Heading>
+    <Wrapper isMobile={isMobile}>
+      <AboutSection isMobile={isMobile}>
+        <TextBox
+          style={{ height: "100%" }}
+        >
+          <Heading>Nirvana Рівне</Heading>
           <Paragraph>
-            &nbsp; &nbsp; ​Ласкаво просимо в квартирно-готель Nirvana – місце,
-            де Ви захочете перебувати тривалий час, навіть якщо Ви знаходитесь у
+            &nbsp; &nbsp; Ласкаво просимо в квартирно-готель Nirvana – місце, де
+            Ви захочете перебувати тривалий час, навіть якщо Ви знаходитесь у
             бізнес-поїздці. Наш готель розташований в зручному місці, всього
             кілька хвилин пішки від усього, що може знадобитися мандрівникові.
           </Paragraph>
-          <Paragraph>
+          <Paragraph className="lastParagraph">
             &nbsp; &nbsp; Ми зібрали все необхідне для тривалої подорожі або
             короткого відпочинку протягом кількох днів. Вишуканий стиль нашого
             готелю і високоякісний сервіс зроблять Ваше перебування з нами
@@ -26,29 +34,30 @@ function About() {
             готель. Поєднання сучасного стилю і затишних номерів допоможе Вам
             завжди почуватися спокійно і приємно. Ми піклуємося про кожну
             дрібницю в нашому готелі, щоб Вам не довелося ні про що турбуватися.
-            Просто приїжджайте до нас, і ми зробимо Вашу подорож незабутньою.  
+            Просто приїжджайте до нас, і ми зробимо Вашу подорож незабутньою.
           </Paragraph>
-        </div>
-        <ButtonWrapper>
-          <Button>
-            <IoCallOutline />
-            Call Now
-          </Button>
-        </ButtonWrapper>
+          <ButtonWrapper>
+            <Button onClick={handleCall}>
+              <IoCallOutline />
+              Call Now
+            </Button>
+          </ButtonWrapper>
+        </TextBox>
       </AboutSection>
-      <RoomImageWrapper>
+      <RoomImageWrapper isMobile={isMobile}>
         <RoomImage src={banner} />
       </RoomImageWrapper>
     </Wrapper>
   );
 }
 
-const Wrapper = styled("div")`
+const Wrapper = styled("div")<{ isMobile: boolean }>`
   display: flex;
-  padding: 1rem 3rem;
+  flex-direction: ${({ isMobile }) => (isMobile ? "column-reverse" : "row")};
+  padding: ${({ isMobile }) => (isMobile ? "0rem 1rem" : "1rem 3rem")};
 `;
-const RoomImageWrapper = styled("div")`
-  width: 50%;
+const RoomImageWrapper = styled("div")<{ isMobile: boolean }>`
+  width: ${({ isMobile }) => (isMobile ? "100%" : "50%")};
 `;
 
 const ButtonWrapper = styled("div")`
@@ -58,8 +67,19 @@ const ButtonWrapper = styled("div")`
   @media only screen and ${DEVICES.md} {
     display: none;
   }
+  display: flex;
+  justify-content: center;
 `;
 
+const TextBox = styled("div")`
+  position: relative;
+  padding: 20px;
+  justify-content:center;
+  display:flex;
+  flex-direction:column;
+  background-color: #fff;
+  overflow: hidden;
+`;
 const Button = styled("button")`
   svg {
     width: 20px;
@@ -89,12 +109,13 @@ const Heading = styled("h2")`
 `;
 const RoomImage = styled("img")`
   width: 100%;
+  height:80%;
 `;
-const AboutSection = styled("div")`
+const AboutSection = styled("div")<{ isMobile: boolean }>`
   display: flex;
   justify-content: center;
   flex-direction: column;
-  width: 50%;
+  width: ${({ isMobile }) => (isMobile ? "100%" : "50%")};
 `;
 
 export default About;

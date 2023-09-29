@@ -11,21 +11,33 @@ function Form() {
     const [message,onChangeMessage] = useInput();
     const [isLoading,setLoading]= useState(false)
 
-   
+    useEffect(() => {
+      const publicId= import.meta.env.VITE_PUBLIC_KEY
+      emailjs.init(publicId)}, []);
+
     const onSubmit = async () => {
        
-      //   const serviceId = import.meta.env.VITE_SERVICE_ID
-      //   const templateId= import.meta.env.VITE_TEMPLATE_ID
-      //   const params = {
-      //       from_name: name,
-      //       message,
-      //   }
-      //   emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', params, 'YOUR_PUBLIC_KEY')
-      // .then((result) => {
-      //     console.log(result.text);
-      // }, (error) => {
-      //     console.log(error.text);
-      // });
+        const serviceId = import.meta.env.VITE_SERVICE_ID
+        const templateId= import.meta.env.VITE_TEMPLATE_ID
+        
+        
+        try {
+          setLoading(true);
+          await emailjs.send(serviceId, templateId, {
+           name,
+           email,
+           message
+          });
+          alert("Дякуємо за відгук !");
+          onChangeName('')
+          onChangeEmail('')
+          onChangeMessage('')
+        } catch (error) {
+          alert("Сталася помилка! Спробуйте пізніше");
+
+        } finally {
+          setLoading(false);
+        }
       };
 
     const isDisabled = useMemo(()=>{
@@ -46,7 +58,7 @@ function Form() {
         onChange={(e)=>onChangeMessage(e.target.value)}
           size="small"
           type="text"
-          label="Address"
+          label="Feedback"
           fullWidth
           multiline
           rows={4}
@@ -56,7 +68,7 @@ function Form() {
         isLoading ? <CircularProgress/>
         :
       <Button
-        style={{ background: "#7a282c", fontWeight: 200 }}
+        style={{ background: "#7a282c", color:'white', fontWeight: 200 }}
         onClick={onSubmit}
         variant="contained"
         disabled={isDisabled}

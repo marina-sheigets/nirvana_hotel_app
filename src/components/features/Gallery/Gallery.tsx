@@ -14,16 +14,19 @@ import img12 from '../../../assets/IMG_8959.jpeg'
 import img13 from '../../../assets/IMG_9022.jpeg'
 import img14 from '../../../assets/IMG_9152.jpeg'
 import styled from "styled-components";
+import { useMemo } from "react";
 
 function Gallery() {
  const images = [img1,img2,img3,img4,img5,img6,img7,img8,img9,img10,img11,img12,img13,img14]
+ const isMobile = useMemo(() => window.innerWidth <= 900, []);
+  
   return (
     <Wrapper>
       <Heading>Галерея</Heading>
       <GalleryRow>
         {
-          images.map((img)=>(
-            <img height='600' src={img}/>
+          images.map((img,index)=>(
+            <img key={index} height={isMobile ? '400':'600'} src={img}/>
           ))
         }
       </GalleryRow>

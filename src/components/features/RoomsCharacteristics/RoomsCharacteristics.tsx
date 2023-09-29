@@ -1,8 +1,11 @@
 import { styled } from "styled-components";
 import img1 from "../../../assets/IMG_6398.jpeg";
 import Charasteristics from "../Charasteristics/Charasteristics";
+import { useMemo } from "react";
 
 function RoomsCharacteristics() {
+  const isMobile = useMemo(() => window.innerWidth <= 900, []);
+
   const CHARAST1 = [
     "кондиционер",
     "телевізор від 32 дюймів",
@@ -19,13 +22,14 @@ function RoomsCharacteristics() {
 
   return (
     <Wrapper>
-      <Heading>Наповнення номерів</Heading>
+      <Heading isMobile={isMobile}>Наповнення номерів</Heading>
       <Block>
         <Charasteristics list={CHARAST1} />
-
-        <ImageWrapper>
+        {
+          isMobile ? null : <ImageWrapper>
           <Image width="500" src={img1} />
         </ImageWrapper>
+        } 
       </Block>
     </Wrapper>
   );
@@ -52,11 +56,11 @@ const ImageWrapper = styled("div")`
 const Image = styled("img")`
   width: 50%;
 `;
-const Heading = styled("h2")`
+const Heading = styled("h2")<{isMobile:boolean}>`
   text-align: center;
-  font-size: 48px;
+  font-size: ${({isMobile})=>isMobile? '24px':'48px'};
   font-weight: 200;
-  padding-top: 1rem;
+  padding-top:${({isMobile})=>isMobile? '1.5rem':' 1rem'};
   margin: 2rem 0 1rem;
 `;
 

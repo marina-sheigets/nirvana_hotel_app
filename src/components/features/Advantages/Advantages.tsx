@@ -4,8 +4,11 @@ import { LuClock9, LuWifi, LuCigarette } from "react-icons/lu";
 import { GiShoppingCart } from "react-icons/gi";
 import { CiParking1 } from "react-icons/ci";
 import { BsClockHistory } from "react-icons/bs";
+import { useMemo } from "react";
 
 function Advantages() {
+  const isMobile = useMemo(() => window.innerWidth <= 900, []);
+
   const advantages = [
     {
       id: 1,
@@ -39,7 +42,7 @@ function Advantages() {
     },
   ];
   return (
-    <Wrapper>
+  <Wrapper isMobile={isMobile}>
       <AdvantagesList>
         <h2>Переваги</h2>
         {advantages.map((elem) => (
@@ -53,15 +56,15 @@ function Advantages() {
   );
 }
 
-const Wrapper = styled("div")`
+const Wrapper = styled("div")<{isMobile:boolean}>`
   margin-top: 1rem;
-  padding-right:3rem;
+  padding-right:${({isMobile})=>isMobile?'0':'3rem'};
   display: flex;
   height: 600px;
   align-items: center;
   background: url(${img});
   background-size: cover;
-  justify-content:end;
+  justify-content:${({isMobile})=>isMobile?'center':'end'};
 `;
 
 const Item = styled("li")`

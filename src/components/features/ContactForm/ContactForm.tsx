@@ -1,9 +1,12 @@
 import { styled } from "styled-components";
 import Form from "./Form";
+import { useMemo } from "react";
 
 function ContactForm() {
+  const isMobile = useMemo(() => window.innerWidth <= 900, []);
+
   return (
-    <Wrapper>
+    <Wrapper isMobile={isMobile}>
       <Info>
         <Heading>Nirvana</Heading>
         <Text style={{ marginBottom: "2rem" }}>
@@ -29,9 +32,9 @@ const Heading = styled("h3")`
   margin: 0;
   font-family: "Roboto", sans-serif;
 `;
-const Wrapper = styled("div")`
+const Wrapper = styled("div")<{isMobile:boolean}>`
   padding: 2rem;
-  width:40%;
+  width: ${({isMobile})=> isMobile? '90%':'40%'};
 `;
 
 const Info = styled("div")``;

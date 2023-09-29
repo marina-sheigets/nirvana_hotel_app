@@ -52,8 +52,9 @@ const Wrapper = styled("div")<{ isMobile: boolean; isOpen: boolean }>`
   display: flex;
   padding: ${({ isMobile, isOpen }) =>
     isOpen ? "1rem 0" : isMobile ? "1rem 3rem" : "1rem 12rem"};
+    gap:  ${({ isMobile }) => (isMobile ? '6rem'  : "0")};
 
-  justify-content: space-between;
+  justify-content:  ${({ isMobile }) => (isMobile ? 'end'  : "space-between")};
   svg {
     cursor: pointer;
   }
@@ -74,7 +75,7 @@ const Image = styled("img")`
 
 const Menu = styled("ul")<{ isMobile: boolean }>`
   display: flex;
-  width: ${({ isMobile }) => (isMobile ? "80%" : "60%")};
+  width: ${({ isMobile }) => (isMobile ? "10%" : "60%")};
   font-size: 1.5rem;
   align-items: center;
   list-style: none;

@@ -3,8 +3,11 @@ import Room from "./Room";
 import img1 from "../../../assets/Room_1.jpeg";
 import img2 from "../../../assets/Room_2.jpeg";
 import img3 from "../../../assets/Room_3.jpeg";
+import { useMemo } from "react";
 
 function Rooms() {
+  const isMobile = useMemo(() => window.innerWidth <= 900, []);
+
   const ROOMS = [
     {
       id: 1,
@@ -26,10 +29,10 @@ function Rooms() {
     },
   ];
   return (
-    <Wrapper>
+    <Wrapper isMobile={isMobile}>
       <Heading>Номери</Heading>
       <SubHeading>Оберіть найкращий варіант для вашого відпочинку.</SubHeading>
-      <RoomsContainer>
+      <RoomsContainer isMobile={isMobile}>
         {ROOMS.map((room) => (
           <Room key={room.id} room={room} />
         ))}
@@ -45,15 +48,18 @@ const Heading = styled("h2")`
   margin-bottom: 0;
 `;
 
-const Wrapper = styled("div")`
-  background: #f2f2f2;
+const Wrapper = styled("div")<{ isMobile: boolean }>`
+  background: ${({isMobile})=> isMobile?'white':'#f2f2f2'} ;
   padding-top: 1.5rem;
 `;
 
-const RoomsContainer = styled("div")`
-display: flex;
-  flex-wrap: wrap; 
-  justify-content: space-between;
+const RoomsContainer = styled("div")<{ isMobile: boolean }>`
+  ${({ isMobile }) =>
+    isMobile
+      ? ""
+      : `display: flex;
+  flex-wrap:  wrap; 
+  justify-content: space-between;`}
 `;
 
 const SubHeading = styled("p")`
