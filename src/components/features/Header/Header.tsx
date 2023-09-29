@@ -1,64 +1,77 @@
-import React, { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { styled } from "styled-components";
-import logo from '../../../assets/logo_nirvana.png'
+import logo from "../../../assets/logo_nirvana.png";
 import { useNavigate } from "react-router-dom";
+import { MENU_ITEMS } from "../../../constants/menuItems";
+import MobileMenu from "../MobileMenu/MobileMenu";
 
-type MenuItem = {
-  label:string;
-  pathname:string
-}
 function Header() {
-  const navigate = useNavigate()
-  const activePathname = useMemo(()=> {
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const activePathname = useMemo(() => {
     return window.location.pathname;
-  },[])
-  const menuItems:MenuItem[] = [{label:'Головна',pathname:'/'},{label:'Про нас',pathname:'/about'},{label:'Контакти',pathname:'/contacts'}]
-  
-  const handleClick = (pathname:string) => {
+  }, []);
+
+  const isMobile = useMemo(() => window.innerWidth <= 900, [ ]);
+
+  const handleClick = (pathname: string) => {
     navigate(pathname);
-  }
+  };
 
   return (
-    <Wrapper>
+    <Wrapper isMobile={isMobile} isOpen={isOpen}>
       <Logo>
-        <Image src={logo}/>
+        <Image src={logo} />
       </Logo>
-      <Menu>
-       {
-        menuItems.map((item,index)=>(
-          <MenuItem onClick={()=>handleClick(item.pathname)} key={index} active={item.pathname === activePathname} >{item.label}</MenuItem>
-        ))
-       }
+      <Menu isMobile={isMobile}>
+        {isMobile ? (
+          <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} handleNavigate={handleClick} activePathname={activePathname}/>
+        ) : (
+          MENU_ITEMS.map((item, index) => (
+            <MenuItem
+              onClick={() => handleClick(item.pathname)}
+              key={index}
+              active={item.pathname === activePathname}
+            >
+              {item.label}
+            </MenuItem>
+          ))
+        )}
       </Menu>
     </Wrapper>
   );
 }
 
-const Wrapper = styled("div")`
+const Wrapper = styled("div")<{isMobile:boolean,isOpen:boolean }>`
   display: flex;
-  padding: 1rem 12rem;
+  padding:${({isMobile,isOpen})=>isOpen?  '1rem 0' : isMobile ? '1rem 3rem': '1rem 12rem'}; 
+
   justify-content: space-between;
+  svg {
+    cursor:pointer;
+  }
 `;
 const Logo = styled("div")`
-  width:300px;
+  width: 300px;
 `;
 
-const MenuItem =  styled('li')<{ active: boolean}>`
-cursor:pointer;
-  color: ${({active})=> active ? '#BF2F28' : 'inherit'}
-`
-const Image = styled('img')`
-  width:100%;
-`
+const MenuItem = styled("li")<{ active: boolean}>`
+  cursor: pointer;
+  color: ${({ active }) => (active ? "#BF2F28" : "inherit")};
+`;
+const Image = styled("img")`
+  width: 100%;
+`;
 
-const Menu = styled("ul")`
+const Menu = styled("ul")<{isMobile:boolean}>`
   display: flex;
-  width: 60%;
-  font-size:1.5rem;
-  align-items:center;
+  width:${({isMobile})=>isMobile ? '80%': '60%'};
+  font-size: 1.5rem;
+  align-items: center;
   list-style: none;
-  justify-content:end;
-  gap:1.5rem;
-  font-weight:300;
+  justify-content: end;
+  gap: 1.5rem;
+  font-weight: 300;
 `;
 export default Header;
