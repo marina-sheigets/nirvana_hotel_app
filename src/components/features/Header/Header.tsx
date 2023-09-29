@@ -13,7 +13,7 @@ function Header() {
     return window.location.pathname;
   }, []);
 
-  const isMobile = useMemo(() => window.innerWidth <= 900, [ ]);
+  const isMobile = useMemo(() => window.innerWidth <= 900, []);
 
   const handleClick = (pathname: string) => {
     navigate(pathname);
@@ -26,7 +26,12 @@ function Header() {
       </Logo>
       <Menu isMobile={isMobile}>
         {isMobile ? (
-          <MobileMenu isOpen={isOpen} setIsOpen={setIsOpen} handleNavigate={handleClick} activePathname={activePathname}/>
+          <MobileMenu
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            handleNavigate={handleClick}
+            activePathname={activePathname}
+          />
         ) : (
           MENU_ITEMS.map((item, index) => (
             <MenuItem
@@ -43,20 +48,23 @@ function Header() {
   );
 }
 
-const Wrapper = styled("div")<{isMobile:boolean,isOpen:boolean }>`
+const Wrapper = styled("div")<{ isMobile: boolean; isOpen: boolean }>`
   display: flex;
-  padding:${({isMobile,isOpen})=>isOpen?  '1rem 0' : isMobile ? '1rem 3rem': '1rem 12rem'}; 
+  padding: ${({ isMobile, isOpen }) =>
+    isOpen ? "1rem 0" : isMobile ? "1rem 3rem" : "1rem 12rem"};
 
   justify-content: space-between;
   svg {
-    cursor:pointer;
+    cursor: pointer;
   }
 `;
 const Logo = styled("div")`
+  display: flex;
+  align-items: center;
   width: 300px;
 `;
 
-const MenuItem = styled("li")<{ active: boolean}>`
+const MenuItem = styled("li")<{ active: boolean }>`
   cursor: pointer;
   color: ${({ active }) => (active ? "#BF2F28" : "inherit")};
 `;
@@ -64,9 +72,9 @@ const Image = styled("img")`
   width: 100%;
 `;
 
-const Menu = styled("ul")<{isMobile:boolean}>`
+const Menu = styled("ul")<{ isMobile: boolean }>`
   display: flex;
-  width:${({isMobile})=>isMobile ? '80%': '60%'};
+  width: ${({ isMobile }) => (isMobile ? "80%" : "60%")};
   font-size: 1.5rem;
   align-items: center;
   list-style: none;
